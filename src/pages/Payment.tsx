@@ -2,14 +2,15 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import PaymentFormStripe from "@/components/PaymentFormStripe";
 import { ArrowLeft, ShieldCheck, CreditCard, Check } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Replace with your own publishable key
-const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
+// Initialize Stripe with your publishable key
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "pk_test_TYooMQauvdEDq54NiTphI7jx");
 
 const Payment = () => {
   const location = useLocation();
@@ -34,6 +35,11 @@ const Payment = () => {
       </div>
     );
   }
+
+  const handlePaymentSuccess = () => {
+    toast.success("Payment successful!");
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -80,10 +86,13 @@ const Payment = () => {
                 <CardDescription>Enter your payment information securely</CardDescription>
               </CardHeader>
               <CardContent>
-                <PaymentFormStripe 
-                  amount={bookingDetails.amount}
-                  bookingDetails={bookingDetails}
-                />
+                <Elements stripe={stripePromise}>
+                  <PaymentFormStripe 
+                    amount={bookingDetails.amount}
+                    courseTitle={bookingDetails.courseType}
+                    onSuccess={handlePaymentSuccess}
+                  />
+                </Elements>
               </CardContent>
             </Card>
           </div>

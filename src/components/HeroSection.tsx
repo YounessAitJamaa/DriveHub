@@ -28,7 +28,7 @@ const HeroSection = () => {
             <div className="flex flex-wrap gap-4">
               <Button 
                 size="lg" 
-                className="bg-white text-blue-700 hover:bg-blue-50 font-semibold"
+                className="bg-white text-blue-700 hover:bg-white/50 font-semibold"
                 onClick={() => navigate("/booking")}
               >
                 Book a Lesson
@@ -37,7 +37,7 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white text-white hover:bg-white/10 font-semibold"
+                className="bg-white text-blue-700 hover:bg-white/50 font-semibold"
                 onClick={() => navigate("/courses")}
               >
                 Explore Courses

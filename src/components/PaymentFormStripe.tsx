@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { CreditCard, CheckCircle2, ShieldCheck } from "lucide-react";
 
 type PaymentFormStripeProps = {
@@ -23,14 +22,13 @@ const PaymentFormStripe = ({ amount, courseTitle, onSuccess }: PaymentFormStripe
     e.preventDefault();
     
     if (!stripe || !elements) {
-      // Stripe.js has not loaded yet. Make sure to disable form submission until Stripe.js has loaded.
+      toast.error("Payment system is not ready. Please try again.");
       return;
     }
     
     setIsProcessing(true);
     
     try {
-      // Create a payment method using the CardElement
       const cardElement = elements.getElement(CardElement);
       
       if (!cardElement) {
@@ -46,16 +44,14 @@ const PaymentFormStripe = ({ amount, courseTitle, onSuccess }: PaymentFormStripe
         throw error;
       }
       
-      console.log("Payment method created:", paymentMethod);
-      
-      // In a real application, you would make an API call to your backend to process the payment
+      // Here you would typically make an API call to your backend to process the payment
       // For demonstration, we're simulating a successful payment
+      console.log("Payment method created:", paymentMethod);
       
       setIsProcessing(false);
       setIsSuccess(true);
       
-      toast({
-        title: "Payment Successful",
+      toast.success("Payment successful!", {
         description: `Your payment of $${amount} for ${courseTitle} has been processed successfully.`,
       });
       
@@ -67,10 +63,8 @@ const PaymentFormStripe = ({ amount, courseTitle, onSuccess }: PaymentFormStripe
       console.error("Payment error:", error);
       setIsProcessing(false);
       
-      toast({
-        title: "Payment Failed",
+      toast.error("Payment failed", {
         description: error.message || "There was an error processing your payment. Please try again.",
-        variant: "destructive",
       });
     }
   };
